@@ -1,0 +1,61 @@
+{
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "eslint-config-prettier",
+    "prettier/react",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": ["react", "@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "rules": {
+    "curly": ["error"],
+    "max-depth": ["warn", 4],
+    "id-length": ["warn", { "exceptions": ["i", "j"], "min": 2 }],
+    "no-lonely-if": ["error"],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "no-restricted-syntax": "off",
+    "class-methods-use-this": "off",
+    "jsx-a11y/href-no-hash": ["off"],
+    "jsx-a11y/anchor-is-valid": ["off"],
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        "assert": "either"
+      }
+    ],
+    "react/prop-types": 0,
+    "react/state-in-constructor": ["off"],
+    "react/jsx-props-no-spreading": ["off"],
+    "react/static-property-placement": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
+}
