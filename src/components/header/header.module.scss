@@ -1,0 +1,37 @@
+@import "../../assets/style/variables";
+
+.header {
+  background: $white;
+  height: 80px;
+  width: 100%;
+  font-size: 18px;
+  line-height: 28px;
+  display: flex;
+  padding: 0 30px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  &--sign-up, &--sign-in, &--logout, &--profile {
+    margin-left: 20px;
+  }
+  &--success {
+    border: 1px solid $green;
+    color: $green !important;
+    border-radius: 5px;
+    padding: 10px 20px;
+  }
+  &--main{
+    color: $txt;
+    border: 1px solid $black;
+    border-radius: 5px;
+    padding: 10px 20px;
+  }
+  &--hide {
+    visibility: hidden;
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+}

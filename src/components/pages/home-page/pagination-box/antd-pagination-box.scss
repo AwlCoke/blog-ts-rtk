@@ -1,0 +1,20 @@
+.ant-pagination-item {
+  background: transparent !important;
+  border: none !important;
+}
+
+.ant-pagination-item a {
+  font-family: Inter, serif !important;
+}
+
+.ant-pagination-item-active {
+  background-color: #1890FF !important;
+}
+.ant-pagination-item-active a {
+  color: white !important;
+}
+
+button.ant-pagination-item-link {
+  background: transparent !important;
+  border: none !important;
+}

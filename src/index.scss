@@ -1,0 +1,30 @@
+@import 'assets/style/variables.scss';
+@import 'assets/style/fonts';
+@import '~antd/dist/antd.css';
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  height: 100%;
+  line-height: 1;
+  font-size: 14px;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  font-family: Inter, sans-serif;
+  color: $black;
+}
+
+input, button, textarea {font-family: inherit;}
+
+button {
+  border: none;
+  padding: 0;
+  box-sizing: border-box;
+  &:focus, &:active {
+    outline: none;
+  }
+}
+
+button{cursor:pointer;background-color:inherit;}
