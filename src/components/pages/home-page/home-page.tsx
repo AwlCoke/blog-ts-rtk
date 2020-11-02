@@ -1,14 +1,14 @@
-import React, {FC} from "react";
-import PaginationBox from "./pagination-box";
-import ArticleList from "./article-list/article-list";
+import React, { FC } from 'react';
+import PaginationBox from './pagination-box';
+import ArticleList from './article-list/article-list';
 
 const HomePage: FC = () => {
-    return(
-        <>
-            <ArticleList />
-            <PaginationBox />
-        </>
-    )
-}
+  return (
+    <>
+      <ArticleList />
+      <PaginationBox />
+    </>
+  );
+};
 
 export default HomePage;

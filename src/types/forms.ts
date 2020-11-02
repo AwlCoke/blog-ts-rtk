@@ -1,20 +1,22 @@
 import { FieldErrors, ValidationRules } from 'react-hook-form';
 
-export type InputProps = {
+export type UserFormProps = {
   label?: string;
   name: string;
   value?: string;
   type: string;
   id?: string;
+  textarea?: string;
   defaultValue?: string;
   tagList?: string;
   placeholder: string;
   errors?: FieldErrors;
   errorMessage?: string;
+  responseError?: string | null;
   rules?: ValidationRules;
 };
 
-export type InputValidatedProps = Omit<InputProps, 'errors'>;
+export type ValidatedUserFormProps = Omit<UserFormProps, 'errors'>;
 
 export type LoginForm = {
   email: string;

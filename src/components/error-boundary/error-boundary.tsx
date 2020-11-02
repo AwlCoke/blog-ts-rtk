@@ -3,27 +3,27 @@ import React, { Component, ReactNode } from 'react';
 import ErrorIndicator from '../error-indicator';
 
 interface Props {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 interface State {
-    hasError: boolean;
+  hasError: boolean;
 }
 
 export default class ErrorBoundary extends Component<Props, State> {
-    public state = {
-        hasError: false,
-    };
+  public state = {
+    hasError: false,
+  };
 
-    componentDidCatch() {
-        this.setState({ hasError: true });
-    }
+  componentDidCatch() {
+    this.setState({ hasError: true });
+  }
 
-    render() {
-        const { hasError } = this.state;
-        const { children } = this.props;
+  render() {
+    const { hasError } = this.state;
+    const { children } = this.props;
 
-        if (hasError) return <ErrorIndicator />;
-        return children;
-    }
+    if (hasError) return <ErrorIndicator />;
+    return children;
+  }
 }
