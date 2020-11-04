@@ -20,8 +20,10 @@ export type UserUpdateType = {
 };
 
 export type RegisterUserType = {
-  email: string;
-  username: string;
-  password: string;
-  repeatPassword: string;
+  user: {
+    email: string;
+    username: string;
+    password: string;
+  };
+  // repeatPassword?: string;
 };

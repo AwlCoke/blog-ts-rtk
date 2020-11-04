@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import PaginationBox from './pagination-box';
-import ArticleList from './article-list/article-list';
+import ArticleList from './blog-article-list/article-list';
 
 const HomePage: FC = () => {
   return (

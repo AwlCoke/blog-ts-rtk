@@ -1,16 +1,12 @@
-import { ArticleModel } from '../types/models/article.model';
 import { getToken, requests } from '../utils/requests';
 import { CreateArticleType, UserLoginType, UserUpdateType, RegisterUserType } from '../types/requests-types';
-import { UserModel } from '../types/models/user.model';
 
 const articlesListURI = '/articles?offset=';
 const articleURI = '/articles/';
 const registerURI = '/users';
 const loginURI = '/users/login';
 
-export const getArticlesList: (a?: number) => Promise<{ articles: ArticleModel[]; articlesCount: number }> = async (
-  offset = 0
-) => {
+export const getArticlesList: (a?: number) => Promise<any> = async (offset = 0) => {
   let response;
   const uri = `${articlesListURI}${offset}`;
   if (getToken()) {
@@ -21,7 +17,7 @@ export const getArticlesList: (a?: number) => Promise<{ articles: ArticleModel[]
   return response;
 };
 
-export const getArticle: (a: string) => Promise<ArticleModel> = async (slug: string) => {
+export const getArticle: (a: string) => Promise<any> = async (slug: string) => {
   let response;
   const uri = `${articleURI}${slug}`;
   if (getToken()) {
@@ -56,17 +52,17 @@ export const unfavoriteArticle: (a: string) => Promise<any> = (slug: string) => 
 };
 
 export const registerNewUser: (a: RegisterUserType) => Promise<any> = (user: RegisterUserType) => {
-  return requests.postWithData(`${registerURI}`, user);
+  return requests.postWithDataUnAuth(`${registerURI}`, user);
 };
 
-export const login: (user: UserLoginType) => Promise<any> = (user: UserLoginType) => {
-  return requests.postWithData(`${loginURI}`, user);
+export const loginApi: (user: UserLoginType) => Promise<any> = (user: UserLoginType) => {
+  return requests.postWithDataUnAuth(`${loginURI}`, user);
 };
 
-export const getCurrentUser: () => Promise<UserModel> = () => {
+export const getCurrentUser: () => Promise<any> = () => {
   return requests.getAuth('/user');
 };
 
-export const updateUser: (a: UserUpdateType) => Promise<Response> = (user: UserUpdateType) => {
+export const updateUser: (a: UserUpdateType) => Promise<any> = (user: UserUpdateType) => {
   return requests.put('/user', user);
 };

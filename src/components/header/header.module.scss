@@ -12,26 +12,30 @@
   align-items: center;
 }
 
-.btn {
-  &--sign-up, &--sign-in, &--logout, &--profile {
-    margin-left: 20px;
-  }
-  &--success {
-    border: 1px solid $green;
-    color: $green !important;
-    border-radius: 5px;
-    padding: 10px 20px;
-  }
-  &--main{
-    color: $txt;
-    border: 1px solid $black;
-    border-radius: 5px;
-    padding: 10px 20px;
-  }
-  &--hide {
-    visibility: hidden;
-    position: absolute;
-    width: 0;
-    height: 0;
-  }
+.login, .register, .logout, .profile {
+  margin-left: 20px;
+}
+
+.success {
+  border: 1px solid $green;
+  color: $green;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.main, .profile {
+  color: $txt;
+}
+
+.logout {
+  border: 1px solid $black;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.hide {
+  visibility: hidden;
+  position: absolute;
+  width: 0;
+  height: 0;
 }

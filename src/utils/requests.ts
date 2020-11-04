@@ -6,7 +6,7 @@ import { CreateArticleType, UserLoginType, UserUpdateType } from '../types/reque
 type BodyRequest = {
   method: string;
   body?: string;
-  headers: { Authorization: string; 'Content-Type': string };
+  headers: { Authorization: string; 'Content-Type': string } | { 'Content-Type': string };
 };
 
 const apiBase = 'https://conduit.productionready.io/api';
@@ -15,23 +15,15 @@ export const getToken: () => string | null = () => {
   return sessionStorage.getItem('token');
 };
 
-const requestBody = {
+const requestMethod = {
   get: 'GET',
   post: 'POST',
   put: 'PUT',
   delete: 'DELETE',
-  headers: {
-    Authorization: `Token ${getToken()}`,
-    'Content-Type': 'application/json',
-  },
-  unAuthHeaders: {
-    'Content-Type': 'application/json',
-  },
 };
 
 const sendAuthRequest = async (uri: string, body: BodyRequest) => {
   const response = await fetch(`${apiBase}${uri}`, body);
-  if (!response.ok) throw new Error();
   return response;
 };
 
@@ -47,14 +39,24 @@ export const requests = {
   },
   getAuth: async (uri: string) => {
     return sendAuthRequest(uri, {
-      method: requestBody.get,
-      headers: requestBody.headers,
+      method: requestMethod.get,
+      headers: { Authorization: `Token ${getToken()}`, 'Content-Type': 'application/json' },
     }).then((data) => data.json());
   },
   post: async (uri: string) => {
     return sendAuthRequest(uri, {
-      method: requestBody.post,
-      headers: requestBody.headers,
+      method: requestMethod.post,
+      headers: { Authorization: `Token ${getToken()}`, 'Content-Type': 'application/json' },
+    });
+  },
+  postWithDataUnAuth: async (
+    uri: string,
+    body: UserModel | ArticleModel | CreateArticleType | UserUpdateType | UserLoginType
+  ) => {
+    return sendAuthRequest(uri, {
+      method: requestMethod.post,
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
     });
   },
   postWithData: async (
@@ -62,22 +64,22 @@ export const requests = {
     body: UserModel | ArticleModel | CreateArticleType | UserUpdateType | UserLoginType
   ) => {
     return sendAuthRequest(uri, {
-      method: requestBody.post,
+      method: requestMethod.post,
       body: JSON.stringify(body),
-      headers: requestBody.headers,
+      headers: { Authorization: `Token ${getToken()}`, 'Content-Type': 'application/json' },
     });
   },
   put: async (uri: string, body: ArticleModel | UserModel | UserUpdateType | CreateArticleType) => {
     return sendAuthRequest(uri, {
-      method: requestBody.put,
+      method: requestMethod.put,
       body: JSON.stringify(body),
-      headers: requestBody.headers,
+      headers: { Authorization: `Token ${getToken()}`, 'Content-Type': 'application/json' },
     });
   },
   delete: async (uri: string) => {
     return sendAuthRequest(uri, {
-      method: requestBody.delete,
-      headers: requestBody.headers,
+      method: requestMethod.delete,
+      headers: { Authorization: `Token ${getToken()}`, 'Content-Type': 'application/json' },
     });
   },
 };

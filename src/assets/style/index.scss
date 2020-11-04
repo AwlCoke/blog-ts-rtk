@@ -1,6 +1,6 @@
-@import 'assets/style/variables.scss';
-@import 'assets/style/fonts';
-@import '~antd/dist/antd.css';
+@import 'variables';
+@import 'fonts';
+@import '../../../node_modules/antd/dist/antd.css';
 
 html, body {
   margin: 0;

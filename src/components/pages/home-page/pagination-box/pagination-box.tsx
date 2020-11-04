@@ -23,7 +23,7 @@ const PaginationBox: FC<Props> = ({ loading, currentPage, articlesCount, changeP
   return (
     <div className={paginationClasses}>
       <Pagination
-        // hideOnSinglePage
+        hideOnSinglePage
         showSizeChanger={false}
         pageSize={20}
         defaultCurrent={1}

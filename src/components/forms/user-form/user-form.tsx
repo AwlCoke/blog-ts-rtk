@@ -1,23 +1,33 @@
 import React, { forwardRef } from 'react';
-import './user-form.scss';
+import classNames from 'classnames';
+import styles from './user-form.module.scss';
 import { UserFormProps } from '../../../types/forms';
 
 const UserForm = forwardRef<HTMLInputElement & HTMLTextAreaElement, UserFormProps>((props, ref) => {
   const { label, textarea, id, errorMessage, errors, responseError = null, name, ...userFormProps } = props;
 
+  const itemStyles = {
+    cnInput: classNames(styles.input, { [styles['input--danger']]: errors?.[name] }),
+    cnError: classNames(styles['message--error']),
+  };
+
   const input = textarea ? (
-    <textarea {...userFormProps} name={name} ref={ref} />
+    <textarea {...userFormProps} id={id} name={name} ref={ref} className={itemStyles.cnInput} />
   ) : (
-    <input {...userFormProps} name={name} ref={ref} />
+    <input {...userFormProps} id={id} name={name} ref={ref} className={itemStyles.cnInput} />
   );
 
   return (
-    <div>
-      {label && <label htmlFor={id}>{label}</label>}
+    <>
+      {label && (
+        <label className={styles.label} htmlFor={id}>
+          {label}
+        </label>
+      )}
       {input}
-      {errors && errors.name && <span>{errors[name].message}</span>}
-      <span>{responseError}</span>
-    </div>
+      {errors?.[name] && <p className={itemStyles.cnError}>{errorMessage}</p>}
+      <p className={itemStyles.cnError}>{responseError}</p>
+    </>
   );
 });
 

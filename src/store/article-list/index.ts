@@ -4,91 +4,10 @@ import { ArticleModel } from '../../types/models/article.model';
 import { ArticleListModel } from '../../types/models/article-list.model';
 import { Dispatch, Thunk } from '../store';
 import { getArticle, getArticlesList } from '../../service/production-ready-service';
+import { updateArticle, setFavoritedArticle } from '../../utils/toFavoriteArticle';
+import { initialArticleState } from '../config';
 
-const updateArticle = (article: ArticleModel) => {
-  if (Object.keys(article).length) {
-    if (article.favorited) {
-      return {
-        ...article,
-        favorited: !article.favorited,
-        favoritesCount: article.favoritesCount - 1,
-      };
-    }
-    return {
-      ...article,
-      favorited: !article.favorited,
-      favoritesCount: article.favoritesCount + 1,
-    };
-  }
-  return article;
-};
-
-const setFavoritedArticle = (articles: ArticleModel[], slug: string) => {
-  let index;
-  let updatedArticle = articles.filter((article, idx) => {
-    if (article.slug === slug) {
-      index = idx;
-      return article;
-    }
-    return '';
-  })[0];
-  if (updatedArticle.favorited) {
-    updatedArticle = { ...updatedArticle, favoritesCount: updatedArticle.favoritesCount - 1 };
-  } else {
-    updatedArticle = { ...updatedArticle, favoritesCount: updatedArticle.favoritesCount + 1 };
-  }
-  if (index !== undefined) {
-    return [
-      ...articles.slice(0, index),
-      { ...updatedArticle, favorited: !updatedArticle.favorited },
-      ...articles.slice(index + 1),
-    ];
-  }
-  return articles;
-};
-
-const initialState: ArticleListModel = {
-  articles: [
-    {
-      title: '',
-      slug: '',
-      createdAt: '',
-      updatedAt: '',
-      body: '',
-      author: {
-        username: '',
-        bio: null,
-        image: '',
-        following: false,
-      },
-      favorited: false,
-      tagList: [],
-      description: '',
-      favoritesCount: 0,
-    },
-  ],
-  articlesCount: 1,
-  currentPage: 1,
-  loading: false,
-  error: null,
-  article: {
-    title: '',
-    slug: '',
-    createdAt: '',
-    updatedAt: '',
-    body: '',
-    author: {
-      username: '',
-      bio: null,
-      image: '',
-      following: false,
-    },
-    favorited: false,
-    tagList: [],
-    description: '',
-    favoritesCount: 0,
-  },
-};
+const initialState: ArticleListModel = initialArticleState;
 
 const index = createSlice({
   name: 'articleList',
@@ -126,7 +45,11 @@ const index = createSlice({
       return state;
     },
     setCurrentArticle: (state: ArticleListModel, action: PayloadAction<ArticleModel>) => {
-      state.article = action.payload;
+      state.article = { ...Object.entries(state.article)[0][1], ...action.payload };
+      return state;
+    },
+    removeCurrentArticle: (state: ArticleListModel) => {
+      state.article = initialState.article;
       return state;
     },
   },
@@ -140,6 +63,7 @@ export const {
   articlesErrors,
   favoritedArticle,
   setCurrentArticle,
+  removeCurrentArticle,
   setCurrentPage,
 } = index.actions;
 
@@ -148,9 +72,11 @@ export const fetchArticles = (page = 1): Thunk => async (dispatch: Dispatch) => 
   dispatch(articlesRequested());
   try {
     const response = await getArticlesList(offset).then((data) => data);
+    dispatch(setCurrentPage(page));
+    dispatch(removeCurrentArticle());
     return dispatch(articlesLoaded(response));
   } catch (error) {
-    dispatch(articlesErrors(error));
+    return dispatch(articlesErrors(error));
   }
 };
 
@@ -159,6 +85,6 @@ export const fetchArticle = (slug: string): Thunk => async (dispatch: Dispatch) 
     const response = await getArticle(slug).then((data) => data);
     return dispatch(setCurrentArticle(response));
   } catch (error) {
-    dispatch(articlesErrors(error));
+    return dispatch(articlesErrors(error));
   }
 };
