@@ -10,12 +10,17 @@ import Spinner from '../../spinner';
 import styles from '../../forms/user-form/user-form.module.scss';
 import { RegisterFormProps } from '../../forms/user-form/config';
 import UserForm from '../../forms/user-form/user-form';
+import { Dispatch } from '../../../store/store';
+import { fetchUser } from '../../../store/user';
+import { fetchArticles } from '../../../store/article-list';
 
 interface Props {
   loading: boolean;
+  getUser: () => void;
+  getArticles: () => void;
 }
 
-const RegisterPage: FC<Props> = ({ loading }: Props) => {
+const RegisterPage: FC<Props> = ({ loading, getUser, getArticles }: Props) => {
   const { register, handleSubmit, reset, errors, watch } = useForm<RegisterForm>();
   const [isResponseError, setResponseError] = useState(false);
   const [responseErrorObj, setResponseErrorObj] = useState<ErrorResponse>({});
@@ -30,9 +35,14 @@ const RegisterPage: FC<Props> = ({ loading }: Props) => {
     try {
       registerNewUser(body).then((response: any) => {
         if (response.ok) {
+          response.json().then((json: any) => {
+            sessionStorage.setItem('token', json.user.token);
+            getUser();
+          });
           setResponseMessage(true);
           reset();
-          history.push('/sign-in');
+          getArticles();
+          history.push('/');
         } else {
           if (response.status === 422) {
             response.json().then((data: any) => setResponseErrorObj(data.errors));
@@ -103,4 +113,11 @@ const mapStateToProps = (state: StateModel) => {
   return { loading };
 };
 
-export default connect(mapStateToProps)(RegisterPage);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    getUser: () => dispatch(fetchUser()),
+    getArticles: () => dispatch(fetchArticles()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);

@@ -1,9 +1,14 @@
-/* eslint-disable no-shadow,no-param-reassign */
+/* eslint-disable no-shadow,no-param-reassign,consistent-return */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ArticleModel } from '../../types/models/article.model';
 import { ArticleListModel } from '../../types/models/article-list.model';
 import { Dispatch, Thunk } from '../store';
-import {favoriteArticle, getArticle, getArticlesList, unfavoriteArticle} from '../../service/production-ready-service';
+import {
+  favoriteArticle,
+  getArticle,
+  getArticlesList,
+  unfavoriteArticle,
+} from '../../service/production-ready-service';
 import { updateArticle, setFavoritedArticle } from '../../utils/toFavoriteArticle';
 import { initialArticleState } from '../config';
 

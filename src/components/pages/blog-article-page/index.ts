@@ -1,3 +1,3 @@
-import BlogArticlePage from "./blog-article-page";
+import BlogArticlePage from './blog-article-page';
 
 export default BlogArticlePage;

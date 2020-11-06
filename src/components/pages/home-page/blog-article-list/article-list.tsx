@@ -26,9 +26,9 @@ const ArticleList: FC<Props> = ({ articles, loading }: Props) => {
 
   return (
     <ErrorBoundary>
-        <div className={styles.list}>
-            <List>{elements}</List>
-        </div>
+      <div className={styles.list}>
+        <List>{elements}</List>
+      </div>
     </ErrorBoundary>
   );
 };

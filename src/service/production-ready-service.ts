@@ -36,10 +36,7 @@ export const deleteArticle: (a: string) => Promise<any> = (slug: string) => {
   return requests.delete(`${articleURI}${slug}`);
 };
 
-export const updateArticle: (a: string, b: any) => Promise<any> = (
-  slug: string,
-  article: CreateArticleType
-) => {
+export const updateArticle: (a: string, b: any) => Promise<any> = (slug: string, article: CreateArticleType) => {
   return requests.put(`${articleURI}${slug}`, article);
 };
 
