@@ -14,7 +14,6 @@
   padding: 0 30px;
   border-radius: 5px;
   box-shadow: $shadow;
-  text-align: center;
 }
 
 .header {
@@ -22,6 +21,7 @@
   font-weight: bold;
   margin-top: 40px;
   margin-bottom: 20px;
+  align-self: center;
 }
 
 .label {
@@ -70,6 +70,7 @@
     color: $danger;
     margin-top: 5px;
     margin-bottom: 0;
+    align-self: flex-start;
   }
   &--success {
     color: $green;
@@ -87,11 +88,14 @@
 
 .checkbox {
   border-top: 1px solid $gray;
-  margin: 20px 0 20px 30px;
   font-family: 'Roboto', serif;
   font-style: normal;
   font-weight: normal;
-  font-size: 14px;
-  line-height: 22px;
-  color: $txt;
+  &--error{
+    color: $danger;
+  }
+}
+
+.checkbox--error span {
+  color: red;
 }

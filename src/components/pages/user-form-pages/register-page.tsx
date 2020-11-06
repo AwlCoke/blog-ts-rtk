@@ -3,6 +3,7 @@ import { useHistory, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { Checkbox } from 'antd';
+import classNames from 'classnames';
 import { RegisterForm, ErrorResponse } from '../../../types/forms';
 import { registerNewUser } from '../../../service/production-ready-service';
 import { StateModel } from '../../../types/models/state.model';
@@ -26,12 +27,19 @@ const RegisterPage: FC<Props> = ({ loading, getUser, getArticles }: Props) => {
   const [responseErrorObj, setResponseErrorObj] = useState<ErrorResponse>({});
   const [responseMessage, setResponseMessage] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
+  const [checkboxError, setCheckboxError] = useState(false);
   const history = useHistory();
 
+  const cbStyles = classNames(styles.checkbox, { [styles['checkbox--error']]: checkboxError });
+
+  // eslint-disable-next-line consistent-return
   const onSubmit = ({ email, username, password }: RegisterForm) => {
+    if (!isChecked) {
+      setCheckboxError(true);
+      return isChecked;
+    }
     setResponseError(false);
     const body = { user: { username, email, password } };
-
     try {
       registerNewUser(body).then((response: any) => {
         if (response.ok) {
@@ -87,15 +95,18 @@ const RegisterPage: FC<Props> = ({ loading, getUser, getArticles }: Props) => {
         {registerFormContent}
         <Checkbox
           style={{ marginTop: 30, paddingTop: 30 }}
-          className={styles.checkbox}
+          className={cbStyles}
           checked={isChecked}
-          onChange={() => setIsChecked(!isChecked)}
+          onChange={() => {
+            if (!isChecked) setCheckboxError(false);
+            setIsChecked(!isChecked);
+          }}
           defaultChecked
         >
           I agree to the processing of my personal information
         </Checkbox>
         <input className={styles.submit} type="submit" />
-        <div className={styles.message}>
+        <div className={styles.message} style={{ alignSelf: 'center' }}>
           Already have an account?{' '}
           <Link to="/sign-in" className={styles.link}>
             Sign up

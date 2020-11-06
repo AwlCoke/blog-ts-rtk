@@ -71,7 +71,7 @@ const LoginPage: FC<Props> = ({ isLogin, loading, getUser, getArticles }: Props)
         {responseMessage && <p className={styles['message--success']}>You successfully signed in!</p>}
         {loginFormContent}
         <input className={styles.submit} type="submit" />
-        <div className={styles.message}>
+        <div className={styles.message} style={{ alignSelf: 'center' }}>
           Don&apos;t have an account?{' '}
           <Link to="/sign-up" className={styles.link}>
             Sign up
