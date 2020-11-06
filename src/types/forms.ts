@@ -4,27 +4,8 @@ export type ErrorState = {
   hasError: boolean;
 };
 
-export type ActionSetUser = {
-  type: Actions.setUser;
-  payload: User | null;
-};
-
-export enum Actions {
-  getArticles = 'GET_ARTICLES',
-  setUser = 'SET_USER',
-}
-
 export type State = {
   user: User | null;
-};
-
-export type ArticlesType = {
-  articles: ArticleType[];
-  articlesCount: number;
-};
-
-export type ArticleFullType = {
-  article: ArticleType;
 };
 
 export type ArticleType = {
@@ -100,23 +81,6 @@ export type FormDataTags = {
   tag: string;
 };
 
-export type EditBody = {
-  user: {
-    username: string;
-    email: string;
-    password: string;
-    image: string;
-  };
-};
-
-export type RegistrationBody = {
-  user: {
-    username: string;
-    email: string;
-    password: string;
-  };
-};
-
 export type AuthenticationBody = {
   user: {
     email: string;
@@ -131,10 +95,6 @@ export type ArticleFormBody = {
     body: string;
     tagList?: string[];
   };
-};
-
-export type UserResponse = {
-  user: User;
 };
 
 export type User = {
@@ -155,5 +115,3 @@ export type ErrorResponse = {
     username?: string[];
   };
 };
-
-export type ErrorResponseKey = 'email' | 'username';

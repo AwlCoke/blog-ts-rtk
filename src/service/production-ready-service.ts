@@ -28,7 +28,7 @@ export const getArticle: (a: string) => Promise<any> = async (slug: string) => {
   return response;
 };
 
-export const createArticle: (a: CreateArticleType) => Promise<any> = (article: CreateArticleType) => {
+export const createArticle: (a: any) => Promise<any> = (article: CreateArticleType) => {
   return requests.postWithData(`${articleURI}`, article);
 };
 
@@ -36,7 +36,7 @@ export const deleteArticle: (a: string) => Promise<any> = (slug: string) => {
   return requests.delete(`${articleURI}${slug}`);
 };
 
-export const updateArticle: (a: string, b: CreateArticleType) => Promise<any> = (
+export const updateArticle: (a: string, b: any) => Promise<any> = (
   slug: string,
   article: CreateArticleType
 ) => {

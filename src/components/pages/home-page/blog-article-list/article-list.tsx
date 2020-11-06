@@ -2,7 +2,7 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'antd';
-import './article-list.module.scss';
+import styles from './article-list.module.scss';
 import ErrorBoundary from '../../../error-boundary';
 import Spinner from '../../../spinner';
 import { StateModel } from '../../../../types/models/state.model';
@@ -26,7 +26,9 @@ const ArticleList: FC<Props> = ({ articles, loading }: Props) => {
 
   return (
     <ErrorBoundary>
-      <List>{elements}</List>
+        <div className={styles.list}>
+            <List>{elements}</List>
+        </div>
     </ErrorBoundary>
   );
 };

@@ -1,0 +1,78 @@
+@import "../../../assets/style/variables";
+@import "../../../assets/style/fonts";
+
+
+.article-form {
+  font-family: Roboto, serif;
+  width: 940px;
+  color: #262626;
+  margin: 35px auto;
+  font-size: 16px;
+  line-height: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: $white;
+  padding: 40px 30px;
+  border-radius: 5px;
+  box-shadow: $shadow;
+}
+
+.header {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 20px;
+  align-self: center;
+}
+
+.submit {
+  cursor: pointer;
+  border: none;
+  width: 320px;
+  color: $white;
+  background: $blue;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0 30px ;
+  box-shadow: $shadow;
+  &:hover, &:active, &:focus {
+    background: $blue-hover;
+  }
+}
+
+.btn {
+  padding: 10px 20px;
+  margin: 15px;
+  margin-left: 0;
+  border-radius: 5px;
+  background-color: $white;
+  &--add {
+    color: $blue;
+    border: 1px solid $blue;
+    width: fit-content;
+    margin-left: 15px;
+    &:hover, &:active, &:focus {
+      color: $blue-hover;
+      border-color: $blue-hover;
+    }
+  }
+}
+
+.tagInput {
+  border: 1px solid #a0b8b9;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.tagBlock {
+  margin-top: 20px;
+}
+
+.tag {
+  list-style: none;
+  color: $blue;
+  border: 1px solid $blue;
+  width: fit-content;
+  padding: 5px;
+  margin: 10px 10px 0 0;
+}

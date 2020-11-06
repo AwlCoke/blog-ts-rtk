@@ -1,23 +1,24 @@
 import React, { FC } from 'react';
+import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { StateModel } from '../../../types/models/state.model';
-import { ArticleFormProps } from '../../forms/article-form/config';
 import { ArticleType } from '../../../types/forms';
+import ArticleForm from "../../forms/article-form";
 
 interface Props {
   isLogin: boolean;
 }
 
 const CreateArticlePage: FC<ArticleType & Props> = ({ isLogin }) => {
-  const createArticleFormContent = ArticleFormProps.map((field) => {
-    return <div>{field}</div>;
-  });
+
+  const history = useHistory();
+
+  if (!isLogin) history.push('/sign-in');
 
   return (
-    <form>
-      <h1>Create New Article</h1>
-      <input type="submit" />
-    </form>
+    <>
+      <ArticleForm mode='create' slug=''/>
+    </>
   );
 };
 

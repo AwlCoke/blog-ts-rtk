@@ -25,5 +25,4 @@ export type RegisterUserType = {
     username: string;
     password: string;
   };
-  // repeatPassword?: string;
 };

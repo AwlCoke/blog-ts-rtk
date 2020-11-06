@@ -1,20 +1,20 @@
-import React, { FC } from 'react';
+import React, {FC, useState} from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import {RouteComponentProps, useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Avatar, List } from 'antd';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import ReactMarkdown from 'react-markdown';
+import classNames from "classnames";
 import { StateModel } from '../../types/models/state.model';
 import { AuthorModel } from '../../types/models/author.model';
 import { UserModel } from '../../types/models/user.model';
 import styles from './article.module.scss';
-import { favoriteArticle, unfavoriteArticle } from '../../service/production-ready-service';
 import { Dispatch } from '../../store/store';
-import { fetchArticle } from '../../store/article-list';
+import { toFavoritedArticle } from '../../store/article-list';
 import { ArticleType } from '../../types/forms';
 
-interface Props {
+interface Props extends RouteComponentProps{
   mode: 'full' | 'short';
   isLogin: boolean;
   user: UserModel;
@@ -27,7 +27,7 @@ interface Props {
   tagList: string[];
   description: string;
   favoritesCount: number;
-  setFavoritedArticle: (slug: string) => void;
+  setFavoritedArticle: (favorited: boolean, slug: string) => void;
 }
 
 const capitalizeFirstLetter = (str: string) => {
@@ -49,7 +49,17 @@ const Article: FC<ArticleType & Props> = ({
   isLogin,
   setFavoritedArticle,
 }: Props) => {
+  const [isFavorited, setFavorited] = useState(favorited);
+  const [countLikes, setCountLikes] = useState(favoritesCount);
   const history = useHistory();
+
+  const style = {
+    article: classNames({[styles.listItem]: mode === 'short', [styles.fullArticle]: mode === 'full'}),
+    articleBody: classNames(styles.body, {[styles['body--full']]: mode === 'full'}),
+    articleDescription: classNames(styles.description, {[styles['description--full']]: mode === 'full'}),
+    deleteBtn: classNames(styles.btn, styles['btn--remove'], {[styles['btn--hide']]: author.username !== user.username}),
+    editBtn: classNames(styles.btn, styles['btn--edit'], {[styles['btn--hide']]: author.username !== user.username}),
+  }
 
   const tags = tagList.map((tag: string) => {
     return (
@@ -59,33 +69,27 @@ const Article: FC<ArticleType & Props> = ({
     );
   });
 
+  const EditPanel = () => (
+      <>
+        <button type="button" className={style.deleteBtn}>Delete</button>
+        <button type="button" onClick={() => history.push(`/${slug}/edit`)} className={style.editBtn}>Edit</button>
+      </>
+  );
+
   const formatDate = format(new Date(createdAt).getTime(), 'PP');
 
   let formatTitle = capitalizeFirstLetter(title).split(' ').slice(0, 5).join(' ');
   formatTitle = formatTitle.length > 30 ? `${formatTitle.split('').slice(0, 30).join('')}...` : formatTitle;
 
   const onLike = () => {
-    if (favorited) {
-      unfavoriteArticle(slug).then((response) => {
-        if (response.ok) {
-          return setFavoritedArticle(slug);
-        }
-        return response;
-      });
-    } else {
-      favoriteArticle(slug).then((response) => {
-        if (response.ok) {
-          return setFavoritedArticle(slug);
-        }
-        return response;
-      });
-    }
+    if(isFavorited) setCountLikes(countLikes - 1)
+    if(!isFavorited) setCountLikes(countLikes + 1)
+    setFavorited(!isFavorited);
+    setFavoritedArticle(favorited, slug);
   };
 
-  if (!isLogin) history.push('/sign-in');
-
   return (
-    <List.Item key={slug} className="blog-list_item">
+    <List.Item key={slug} style={{alignItems: 'flex-start'}} className={style.article}>
       <List.Item.Meta
         avatar={
           <Avatar
@@ -99,38 +103,40 @@ const Article: FC<ArticleType & Props> = ({
           />
         }
         title={
-          <div className="item_title-block title-block">
+          <div className={styles.titleBlock}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <button
-                className="title-block_title"
+                className={styles.title}
                 type="button"
                 onClick={() => {
-                  // fetchArticle(slug);
                   history.push(`/articles/${slug}`);
                 }}
               >
                 {formatTitle}
               </button>
               <div>
-                <button className="title-block_like-btn" type="button" disabled={!isLogin} onClick={onLike}>
-                  {favorited && <HeartFilled style={{ color: 'red' }} />}
-                  {!favorited && <HeartOutlined />}
+                <button className={styles.like} type="button" disabled={!isLogin} onClick={onLike}>
+                  {isFavorited && <HeartFilled style={{ color: 'red' }} />}
+                  {!isFavorited && <HeartOutlined />}
                 </button>
-                <span>{favoritesCount}</span>
+                <span>{countLikes}</span>
               </div>
             </div>
-            <div className="title-block_tag-block">{tags}</div>
-            <div className="title-block_nickname-block">
-              <div className="title-block_nickname">{author.username}</div>
-              <div className="title-block_date">{formatDate}</div>
+            <div>{tags}</div>
+            <div className={styles.nicknameBlock}>
+              <div className={styles.nickname}>{author.username}</div>
+              <div className={styles.date}>{formatDate}</div>
             </div>
           </div>
         }
         description={
           <div>
-            <div className="description-block">{description}</div>
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+              <div className={style.articleDescription}>{description}</div>
+              {mode === 'full' && <EditPanel /> }
+            </div>
             {mode === 'full' && (
-              <div>
+              <div className={style.articleBody}>
                 <ReactMarkdown source={body} />
               </div>
             )}
@@ -150,7 +156,7 @@ const mapStateToProps = (state: StateModel) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setFavoritedArticle: async (slug: string) => dispatch(await favoriteArticle(slug)),
+    setFavoritedArticle: async (favorited: boolean, slug: string) => dispatch(toFavoritedArticle(favorited, slug)),
   };
 };
 

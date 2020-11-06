@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ArticleModel } from '../../types/models/article.model';
 import { ArticleListModel } from '../../types/models/article-list.model';
 import { Dispatch, Thunk } from '../store';
-import { getArticle, getArticlesList } from '../../service/production-ready-service';
+import {favoriteArticle, getArticle, getArticlesList, unfavoriteArticle} from '../../service/production-ready-service';
 import { updateArticle, setFavoritedArticle } from '../../utils/toFavoriteArticle';
 import { initialArticleState } from '../config';
 
@@ -37,7 +37,7 @@ const index = createSlice({
     favoritedArticle: (state: ArticleListModel, action: PayloadAction<string>) => {
       const { article, articles } = state;
       setFavoritedArticle(articles, action.payload);
-      updateArticle(article);
+      if (article.slug === action.payload) updateArticle(article);
       return state;
     },
     setCurrentPage: (state: ArticleListModel, action: PayloadAction<number>) => {
@@ -73,7 +73,6 @@ export const fetchArticles = (page = 1): Thunk => async (dispatch: Dispatch) => 
   try {
     const response = await getArticlesList(offset).then((data) => data);
     dispatch(setCurrentPage(page));
-    dispatch(removeCurrentArticle());
     return dispatch(articlesLoaded(response));
   } catch (error) {
     return dispatch(articlesErrors(error));
@@ -86,5 +85,26 @@ export const fetchArticle = (slug: string): Thunk => async (dispatch: Dispatch) 
     return dispatch(setCurrentArticle(response));
   } catch (error) {
     return dispatch(articlesErrors(error));
+  }
+};
+
+export const toFavoritedArticle = (favorited: boolean, slug: string): Thunk => async (dispatch: Dispatch) => {
+  try {
+    if (favorited) {
+      await unfavoriteArticle(slug).then((response) => {
+        if (response.ok) {
+          return dispatch(favoritedArticle(slug));
+        }
+      });
+    }
+    if (!favorited) {
+      await favoriteArticle(slug).then((response) => {
+        if (response.ok) {
+          return dispatch(favoritedArticle(slug));
+        }
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 };

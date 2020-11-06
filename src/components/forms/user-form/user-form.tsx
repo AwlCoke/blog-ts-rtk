@@ -12,7 +12,7 @@ const UserForm = forwardRef<HTMLInputElement & HTMLTextAreaElement, UserFormProp
   };
 
   const input = textarea ? (
-    <textarea {...userFormProps} id={id} name={name} ref={ref} className={itemStyles.cnInput} />
+    <textarea {...userFormProps} id={id} name={name} ref={ref} className={itemStyles.cnInput} rows={10} />
   ) : (
     <input {...userFormProps} id={id} name={name} ref={ref} className={itemStyles.cnInput} />
   );
